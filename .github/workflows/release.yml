@@ -43,7 +43,7 @@ jobs:
       - name: Run main application
         run: |
           cd build
-          ./printer_ip
+          ./print_ip
 
       - name: Create package
         run: cmake --build build --target package
@@ -67,6 +67,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/printer_ip-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: printer_ip-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./build/print_ip-0.0.${{ github.run_number }}-Linux.deb
+          asset_name: print_ip-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
