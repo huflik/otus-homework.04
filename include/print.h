@@ -60,29 +60,15 @@ struct all_same<T> : std::true_type {};
 template<typename T, typename U, typename... Ts>
 struct all_same<T, U, Ts...> : std::conditional<std::is_same<T, U>::value, all_same<T, Ts...>, std::false_type>::type {};
 
-template<std::size_t Index, typename... Ts>
-struct TuplePrint
-{
-    static void print(const std::tuple<Ts...>& t)
-    {      
-        TuplePrint<Index - 1, Ts...>::print(t);
-        std::cout << "." << std::get<Index>(t);
-    }
-};
+template<size_t Index, typename... Ts>
+typename std::enable_if<all_same<Ts...>::value && Index == sizeof...(Ts) - 1>::type
+print_ip(const std::tuple<Ts...>& t) {
+    std::cout << std::get<Index>(t) << std::endl;
+}
 
-template<typename... Ts>
-struct TuplePrint<0, Ts...>
-{
-    static void print(const std::tuple<Ts...>& t)
-    {
-        std::cout << std::get<0>(t);
-    }
-};
-
-template<typename... Ts>
-typename std::enable_if<all_same<Ts...>::value>::type
-print_ip(const std::tuple<Ts...>& t)
-{
-    TuplePrint<sizeof...(Ts) - 1, Ts...>::print(t);
-    std::cout << std::endl;
-}  
+template<size_t Index = 0, typename... Ts>
+typename std::enable_if<all_same<Ts...>::value && Index < sizeof...(Ts) - 1>::type
+print_ip(const std::tuple<Ts...>& t) {
+    std::cout << std::get<Index>(t) << ".";
+    print_ip<Index + 1>(t);
+}
