@@ -102,28 +102,29 @@ struct all_same<T, U, Ts...> : std::conditional<
     std::false_type
 >::type {};
 
+
 /**
- * @brief Печать последнего элемента tuple как завершение IP-адреса.
+ * @brief Печать элементов tuple как IP-адреса.
  *
- * @tparam Index Индекс последнего элемента.
+ * Функция рекурсивно обходит элементы tuple и выводит их как IP-адрес.
+ * Между элементами ставятся точки, после последнего элемента - перевод строки.
+ *
+ * @tparam Index Текущий индекс (по умолчанию 0).
  * @tparam Ts Пакет типов. Все типы должны совпадать.
  * @param t Кортеж значений.
+ *
+ * @details
+ * Имеет две специализации:
+ * - Для промежуточных элементов: добавляет точку после элемента
+ * - Для последнего элемента: добавляет перевод строки
  */
+// Базовый случай рекурсии
 template<size_t Index, typename... Ts>
 typename std::enable_if<all_same<Ts...>::value && Index == sizeof...(Ts) - 1>::type
 print_ip(const std::tuple<Ts...>& t) {
     std::cout << std::get<Index>(t) << std::endl;
 }
-
-/**
- * @brief Рекурсивная печать элементов tuple как IP-адреса.
- *
- * Каждый элемент выводится, за исключением последнего, после него ставится точка.
- *
- * @tparam Index Текущий индекс.
- * @tparam Ts Пакет типов. Все типы должны совпадать.
- * @param t Кортеж значений.
- */
+// Основная рекурсивная версия
 template<size_t Index = 0, typename... Ts>
 typename std::enable_if<all_same<Ts...>::value && Index < sizeof...(Ts) - 1>::type
 print_ip(const std::tuple<Ts...>& t) {
