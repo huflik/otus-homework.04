@@ -85,7 +85,7 @@ print_ip(const Container& container)
 }
 
 /**
- * @brief Метапрограммная проверка, что все типы одинаковы.
+ * @brief Проверка, что все типы одинаковы.
  */
 template<typename...> struct all_same;
 
