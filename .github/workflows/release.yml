@@ -60,6 +60,11 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Rename package
+        run: |
+          cd build
+          mv print_ip-0.0.${{ github.run_number }}-Linux.deb print_ip.deb
+
       - name: Upload Release Asset
         if: steps.create_release.outputs.id != ''
         uses: actions/upload-release-asset@v1
@@ -67,6 +72,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/print_ip-0.0.${{ github.run_number }}-Linux.deb
-          asset_name: print_ip-0.0.${{ github.run_number }}.deb
+          asset_path: ./build/print_ip.deb
+          asset_name: print_ip.deb
           asset_content_type: application/vnd.debian.binary-package
