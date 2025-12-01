@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - feature/github_actions
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,53 +20,25 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential doxygen graphviz
+          sudo apt-get install -y cmake build-essential doxygen
       
       - name: Configure CMake
         run: cmake -B build -DPATCH_VERSION=${{ github.run_number }}
-      
+
       - name: Build project
         run: cmake --build build
-      
+
       - name: Run main application
         run: |
           cd build
           ./print_ip
-      
+
       - name: Generate Doxygen documentation
-        run: |
-          cd ${GITHUB_WORKSPACE}
-          doxygen -g Doxyfile 2>/dev/null || true
-          echo "PROJECT_NAME = \"print_ip\"" >> Doxyfile
-          echo "PROJECT_NUMBER = \"0.0.${{ github.run_number }}\"" >> Doxyfile
-          echo "OUTPUT_DIRECTORY = docs" >> Doxyfile
-          echo "INPUT = include/print.h" >> Doxyfile
-          echo "RECURSIVE = NO" >> Doxyfile
-          echo "GENERATE_HTML = YES" >> Doxyfile
-          echo "GENERATE_LATEX = NO" >> Doxyfile
-          echo "HAVE_DOT = YES" >> Doxyfile
-          echo "CALL_GRAPH = YES" >> Doxyfile
-          echo "CALLER_GRAPH = YES" >> Doxyfile
-          doxygen Doxyfile
-      
-      - name: Upload documentation artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: doxygen-docs
-          path: docs/html/
-          retention-days: 7
-      
-      - name: Deploy documentation to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/html
-          keep_files: false
-      
+        run: doxygen Doxyfile
+
       - name: Create package
         run: cmake --build build --target package
-      
+
       - name: Create Release
         if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/github_actions')
         id: create_release
@@ -77,12 +50,20 @@ jobs:
           release_name: Release v0.0.${{ github.run_number }}
           draft: false
           prerelease: false
-      
+
       - name: Rename package
         run: |
           cd build
           mv print_ip-0.0.${{ github.run_number }}-Linux.deb print_ip.deb
-      
+
+      - name: Deploy documentation
+        if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/html
+          publish_branch: gh-pages
+
       - name: Upload Release Asset
         if: steps.create_release.outputs.id != ''
         uses: actions/upload-release-asset@v1
