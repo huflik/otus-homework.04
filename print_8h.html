@@ -132,7 +132,7 @@ $(function() {
 <tr class="separator:a33e2eb53f020793d2a48d37d8c5f9395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37bc239fcb0a304e997def2ac7cf4151" id="r_a37bc239fcb0a304e997def2ac7cf4151"><td class="memTemplParams" colspan="2">template&lt;size_t Index, typename... Ts&gt; </td></tr>
 <tr class="memitem:a37bc239fcb0a304e997def2ac7cf4151"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; <a class="el" href="structall__same.html">all_same</a>&lt; Ts... &gt;::value &amp;&amp;Index==sizeof...(Ts) -1 &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="print_8h.html#a37bc239fcb0a304e997def2ac7cf4151">print_ip</a> (const std::tuple&lt; Ts... &gt; &amp;t)</td></tr>
-<tr class="memdesc:a37bc239fcb0a304e997def2ac7cf4151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Базовый случай рекурсии для печати tuple.  <br /></td></tr>
+<tr class="memdesc:a37bc239fcb0a304e997def2ac7cf4151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Рекурсивная печать элементов tuple как IP-адреса.  <br /></td></tr>
 <tr class="separator:a37bc239fcb0a304e997def2ac7cf4151"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Функции</h2>
@@ -259,12 +259,12 @@ template&lt;size_t Index, typename... Ts&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Базовый случай рекурсии для печати tuple. </p>
-<p>Выводит последний элемент tuple и завершает строку.</p>
+<p>Рекурсивная печать элементов tuple как IP-адреса. </p>
+<p>Функция рекурсивно обходит элементы tuple и выводит их как IP-адрес. Между элементами ставятся точки, после последнего элемента - перевод строки.</p>
 <dl class="tparams"><dt>Параметры шаблона</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Index</td><td>Текущий индекс в tuple </td></tr>
-    <tr><td class="paramname">Ts</td><td>Пакет типов элементов tuple </td></tr>
+    <tr><td class="paramname">Index</td><td>Текущий индекс (по умолчанию 0) </td></tr>
+    <tr><td class="paramname">Ts</td><td>Пакет типов элементов tuple. Все типы должны совпадать. </td></tr>
   </table>
   </dd>
 </dl>
