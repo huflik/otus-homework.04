@@ -116,21 +116,6 @@ struct all_same<T, U, Ts...> : std::conditional<
 >::type {};
 
 /**
- * @brief Базовый случай рекурсии для печати tuple.
- * 
- * Выводит последний элемент tuple и завершает строку.
- * 
- * @tparam Index Текущий индекс в tuple
- * @tparam Ts Пакет типов элементов tuple
- * @param t Кортеж значений
- */
-template<size_t Index, typename... Ts>
-typename std::enable_if<all_same<Ts...>::value && Index == sizeof...(Ts) - 1>::type
-print_ip(const std::tuple<Ts...>& t) {
-    std::cout << std::get<Index>(t) << std::endl; 
-}
-
-/**
  * @brief Рекурсивная печать элементов tuple как IP-адреса. 
  * 
  * Функция рекурсивно обходит элементы tuple и выводит их как IP-адрес.
@@ -140,6 +125,13 @@ print_ip(const std::tuple<Ts...>& t) {
  * @tparam Ts Пакет типов элементов tuple. Все типы должны совпадать.
  * @param t Кортеж значений
  */
+
+template<size_t Index, typename... Ts>
+typename std::enable_if<all_same<Ts...>::value && Index == sizeof...(Ts) - 1>::type
+print_ip(const std::tuple<Ts...>& t) {
+    std::cout << std::get<Index>(t) << std::endl; 
+}
+
 template<size_t Index = 0, typename... Ts>
 typename std::enable_if<all_same<Ts...>::value && Index < sizeof...(Ts) - 1>::type
 print_ip(const std::tuple<Ts...>& t) {
