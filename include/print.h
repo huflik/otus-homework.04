@@ -127,7 +127,7 @@ struct all_same<T, U, Ts...> : std::conditional<
 template<size_t Index, typename... Ts>
 typename std::enable_if<all_same<Ts...>::value && Index == sizeof...(Ts) - 1>::type
 print_ip(const std::tuple<Ts...>& t) {
-    std::cout << std::get<Index>(t) << std::endl;
+    std::cout << std::get<Index>(t) << std::endl; 
 }
 
 /**
